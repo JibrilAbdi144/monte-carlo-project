@@ -52,7 +52,7 @@ def tabulatePriceData(pathway_counts, stock, strike, time, rate, sigma, option_t
     table_columns, table_data = generateTablePriceData(pathway_counts=pathway_counts, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type=option_type)
 
     print("|".join([f"{table_column:^30}" for table_column in table_columns]))
-    print("+".join(["-"*30 for column in table_columns]))
+    print("|".join(["-"*30 for column in table_columns]))
     for row in table_data:
         print("|".join([
             f"{item:^30}" if index == 0 else f"{item:^30,.2f}" for index, item in enumerate(row)
@@ -99,7 +99,4 @@ if __name__ == "__main__":
 
     #plotPriceConvergence(pathway_counts=pathway_counts, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type=option_type)
 
-    print(np.mean(generateMonteCarloPrices(pathway_count=1000000, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type = option_type)))
-    print(np.median([
-        np.mean(generateMonteCarloPrices(pathway_count=1000000, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type = option_type)) for i in range(3)
-    ]))
+    tabulatePriceData(pathway_counts, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type=option_type)
