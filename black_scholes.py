@@ -16,19 +16,28 @@ optiontype - either "call" or "put", used to calculate call options or put optio
 Returns:
 Value of a call option or put option depending on the value of optiontype
 '''
-def BlackScholes(S, K, T, r, sigma, optiontype):
+def BlackScholes(option_parameters):
+
+    stock = option_parameters["stock"]
+    strike = option_parameters["strike"]
+    time = option_parameters["time"]
+    rate = option_parameters["rate"]
+    sigma = option_parameters["sigma"]
+    option_type = option_parameters["option_type"]
+
+
     #Calculates the value of d1 and d2
     #for the Black-Scholes formula
-    d1 = ((np.log(S/K) + (r+0.5*sigma**2)) * T) / (sigma * np.sqrt(T))
-    d2 = d1 - sigma * np.sqrt(T)
+    d1 = ((np.log(stock / strike) + (rate + 0.5 * sigma ** 2)) * time) / (sigma * np.sqrt(time))
+    d2 = d1 - sigma * np.sqrt(time)
 
     #Returns the value of a call option if optiontype is "call" or
     #returns the value of a put option if optiontype is "put"
-    if optiontype == "call":
-        call_option = S * stats.norm.cdf(d1) - K * np.exp(-r * T) * stats.norm.cdf(d2)
+    if option_type == "call":
+        call_option = stock * stats.norm.cdf(d1) - strike * np.exp(-rate * time) * stats.norm.cdf(d2)
         return call_option
-    elif optiontype == "put":
-        put_option = K * np.exp(-r * T) * stats.norm.cdf(-d2) - S * stats.norm.cdf(-d1)
+    elif option_type == "put":
+        put_option = strike * np.exp(-rate * time) * stats.norm.cdf(-d2) - stock * stats.norm.cdf(-d1)
         return put_option
     else:
         raise ValueError("Invalid value for 'option type' entered.\nPlease use either 'call' or 'put'.")

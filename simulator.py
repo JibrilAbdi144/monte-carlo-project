@@ -14,7 +14,14 @@ optiontype - either "call" or "put", used to calculate call options or put optio
 Returns:
 Value of a call option or put option depending on the value of optiontype
 '''
-def OptionSimulator(stock, strike, time, rate, sigma, optiontype):
+def OptionSimulator(option_parameters):
+
+    stock = option_parameters["stock"]
+    strike = option_parameters["strike"]
+    time = option_parameters["time"]
+    rate = option_parameters["rate"]
+    sigma = option_parameters["sigma"]
+    option_type = option_parameters["option_type"]
 
     #Simulates the expiry value of a stock underlying asset
     #using a Weiner process (normal distribution)
@@ -29,9 +36,9 @@ def OptionSimulator(stock, strike, time, rate, sigma, optiontype):
 
     #Returns the appropriate payoff value
     #depending on the value of optiontype
-    if optiontype == "call":
+    if option_type == "call":
         return call_payoff
-    elif optiontype == "put":
+    elif option_type == "put":
         return put_payoff
     else:
         raise ValueError("Invalid value for 'option type' entered.\nPlease use either 'call' or 'put'.")

@@ -2,8 +2,9 @@
 
 ## High-Priority
 - [ ] Fix poor formatting of results table in README.md
+- [ ] Create src directory to contain python scripts
 - [ ] Create tabulate.py and convergence-plot.py
-- [ ] Create and use dictionary of option paramaters
+- [x] Create and use dictionary of option paramaters
 
 ## Low-Priority
 - [ ] Implement antithetic variates

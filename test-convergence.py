@@ -4,34 +4,34 @@ import math
 from simulator import OptionSimulator
 from black_scholes import BlackScholes
 
-def generateMonteCarloPrices(pathway_count, stock, strike, time, rate, sigma, option_type):
+def generateMonteCarloPrices(pathway_count, option_parameters):
     monte_carlo_prices = np.array([
-        OptionSimulator(stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, optiontype=option_type) for x in range(pathway_count)
+        OptionSimulator(option_parameters=option_parameters) for x in range(pathway_count)
     ])
     return monte_carlo_prices
 
-def calculateMeanMonteCarloPrice(pathway_count, stock, strike, time, rate, sigma, option_type):
+def calculateMeanMonteCarloPrice(pathway_count, option_parameters):
     monte_carlo_prices = np.array([
-        OptionSimulator(stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type=option_type) for x in range(pathway_count)
+        OptionSimulator(option_parameters=option_parameters) for x in range(pathway_count)
     ])
     return np.mean(monte_carlo_prices)
 
-def calculatePriceAbsoluteError(pathway_count, stock, strike, time, rate, sigma, option_type):
+def calculatePriceAbsoluteError(pathway_count, option_parameters):
 
-    monte_carlo_price = calculateMeanMonteCarloPrice(pathway_count=pathway_count, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type=option_type)
-    black_scholes_price = BlackScholes(stock, strike, time, rate, sigma, option_type)
+    monte_carlo_price = calculateMeanMonteCarloPrice(pathway_count=pathway_count, option_parameters=option_parameters)
+    black_scholes_price = BlackScholes(option_parameters=option_parameters)
 
     absolute_error = np.abs(monte_carlo_price - black_scholes_price)
 
     return absolute_error
 
-def generateTablePriceData(pathway_counts, stock, strike, time ,rate, sigma, option_type):
+def generateTablePriceData(pathway_counts, option_parameters):
     table_columns = ["Pathway Count", "Mean of Monte Carlo Prices", "Black Scholes Price", "Absolute Error", "Percentage Error"]
 
     table_data = []
-    black_scholes_price = float(BlackScholes(stock, strike, time, rate, sigma, option_type))
+    black_scholes_price = float(BlackScholes(option_parameters=option_parameters))
     for pathway_count in pathway_counts:
-        monte_carlo_prices = generateMonteCarloPrices(pathway_count=pathway_count, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type=option_type)
+        monte_carlo_prices = generateMonteCarloPrices(pathway_count=pathway_count, option_parameters=option_parameters)
         mean_monte_carlo_price = float(np.mean(monte_carlo_prices))
         absolute_error = abs(mean_monte_carlo_price - black_scholes_price)
         percentage_error = 100 * absolute_error / black_scholes_price
@@ -46,10 +46,10 @@ def generateTablePriceData(pathway_counts, stock, strike, time ,rate, sigma, opt
     return table_columns, table_data
     
 
-def tabulatePriceData(pathway_counts, stock, strike, time, rate, sigma, option_type):
+def tabulatePriceData(pathway_counts, option_parameters):
 
     column_width = 20
-    table_columns, table_data = generateTablePriceData(pathway_counts=pathway_counts, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type=option_type)
+    table_columns, table_data = generateTablePriceData(pathway_counts=pathway_counts, option_parameters=option_parameters)
 
     print("|".join([f"{table_column:^30}" for table_column in table_columns]))
     print("|".join(["-"*30 for column in table_columns]))
@@ -68,13 +68,13 @@ def getBestFitLine(pathway_counts, relative_errors):
 
     return a, b, R
 
-def plotPriceConvergence(pathway_counts, stock, strike, time, rate, sigma, option_type):
+def plotPriceConvergence(pathway_counts, option_parameters):
     monte_carlo_prices = np.array([
         np.median([
-            np.mean(generateMonteCarloPrices(pathway_count=pathway_count, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type=option_type)) for i in range(3)
+            np.mean(generateMonteCarloPrices(pathway_count=pathway_count, option_parameters=option_parameters)) for i in range(3)
         ]) for pathway_count in pathway_counts
     ])
-    black_scholes_price = BlackScholes(stock, strike, time, rate, sigma, option_type)
+    black_scholes_price = BlackScholes(option_parameters=option_parameters)
     relative_errors = np.abs(monte_carlo_prices - black_scholes_price) / black_scholes_price
 
     a, b, R = getBestFitLine(pathway_counts, relative_errors)
@@ -88,15 +88,16 @@ def plotPriceConvergence(pathway_counts, stock, strike, time, rate, sigma, optio
 
 
 if __name__ == "__main__":
-    stock = 100
-    strike = 100
-    time = 1
-    rate = 0.05
-    sigma = 0.2
-    option_type = "call"
+    option_parameters = {
+        "stock": 100,
+        "strike": 100,
+        "time": 1,
+        "rate": 0.05,
+        "sigma": 0.2,
+        "option_type": "call"
+    }
 
     pathway_counts = [math.floor(10 ** n) for n in np.linspace(4., 6., 8)]
 
-    #plotPriceConvergence(pathway_counts=pathway_counts, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type=option_type)
-
-    tabulatePriceData(pathway_counts, stock=stock, strike=strike, time=time, rate=rate, sigma=sigma, option_type=option_type)
+    #tabulatePriceData(pathway_counts=pathway_counts, option_parameters=option_parameters)
+    plotPriceConvergence(pathway_counts=pathway_counts, option_parameters=option_parameters)
