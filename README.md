@@ -8,16 +8,16 @@ Monte-carlo simulator using Brownian motion in order to price European option. I
 
 Follwowing table compares the mean price of the Monte-Carlo simulation repeated n times and calculates the percentage error from the Black-Scholes price.
 
-        Pathway Count         |  Mean of Monte Carlo Prices  |     Black Scholes Price      |        Absolute Error        |       Percentage Error       
-------------------------------|------------------------------|------------------------------|------------------------------|------------------------------
-            10000             |            10.43             |            10.45             |             0.02             |             0.22
-            19306             |            10.47             |            10.45             |             0.02             |             0.22
-            37275             |            10.50             |            10.45             |             0.04             |             0.43
-            71968             |            10.48             |            10.45             |             0.03             |             0.29
-            138949            |            10.42             |            10.45             |             0.03             |             0.27
-            268269            |            10.45             |            10.45             |             0.00             |             0.00
-            517947            |            10.45             |            10.45             |             0.00             |             0.05
-           1000000            |            10.47             |            10.45             |             0.02             |             0.15
+|        Pathway Count         |  Mean of Monte Carlo Prices  |     Black Scholes Price      |        Absolute Error        |       Percentage Error       |
+|:----------------------------:|:----------------------------:|:----------------------------:|:----------------------------:|:----------------------------:|
+|             1000             |            11.65             |            10.45             |             1.20             |            11.52             |
+|             2000             |            10.51             |            10.45             |             0.06             |             0.55             |
+|             4000             |            10.29             |            10.45             |             0.16             |             1.51             |
+|             8000             |            10.35             |            10.45             |             0.10             |             0.92             |
+|            16000             |            10.56             |            10.45             |             0.11             |             1.02             |
+|            32000             |            10.39             |            10.45             |             0.06             |             0.62             |
+|            64000             |            10.41             |            10.45             |             0.04             |             0.36             |
+|            128000            |            10.46             |            10.45             |             0.01             |             0.11             |
 
 ## Convergence Analysis
 

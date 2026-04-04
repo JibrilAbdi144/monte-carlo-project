@@ -51,12 +51,12 @@ def tabulatePriceData(pathway_counts, option_parameters):
     column_width = 20
     table_columns, table_data = generateTablePriceData(pathway_counts=pathway_counts, option_parameters=option_parameters)
 
-    print("|".join([f"{table_column:^30}" for table_column in table_columns]))
-    print("|".join(["-"*30 for column in table_columns]))
+    print("|" + "|".join([f"{table_column:^30}" for table_column in table_columns]) + "|")
+    print("|:" + ":|:".join(["-"*28 for column in table_columns]) + ":|")
     for row in table_data:
-        print("|".join([
-            f"{item:^30}" if index == 0 else f"{item:^30,.2f}" for index, item in enumerate(row)
-        ]))
+        print("|" + "|".join([
+            f"{item:^30}" if index == 0 else f"{item:^30.2f}" for index, item in enumerate(row)
+        ]) + "|")
 
 def getBestFitLine(pathway_counts, relative_errors):
 
@@ -93,11 +93,11 @@ if __name__ == "__main__":
         "strike": 100,
         "time": 1,
         "rate": 0.05,
-        "sigma": 0.35,
+        "sigma": 0.2,
         "option_type": "call"
     }
 
-    pathway_counts = [math.floor(10 ** n) for n in np.linspace(3., 6., 8)]
+    pathway_counts = [1000 * math.floor(2 ** n) for n in range(8)]
 
-    #tabulatePriceData(pathway_counts=pathway_counts, option_parameters=option_parameters)
-    plotPriceConvergence(pathway_counts=pathway_counts, option_parameters=option_parameters)
+    tabulatePriceData(pathway_counts=pathway_counts, option_parameters=option_parameters)
+    #plotPriceConvergence(pathway_counts=pathway_counts, option_parameters=option_parameters)
