@@ -6,13 +6,13 @@ from black_scholes import BlackScholes
 
 def generateMonteCarloPrices(pathway_count, option_parameters):
     monte_carlo_prices = np.array([
-        OptionSimulator(option_parameters=option_parameters) for x in range(pathway_count)
+        OptionSimulator(random_seed=np.random.normal(), option_parameters=option_parameters) for x in range(pathway_count)
     ])
     return monte_carlo_prices
 
 def calculateMeanMonteCarloPrice(pathway_count, option_parameters):
     monte_carlo_prices = np.array([
-        OptionSimulator(option_parameters=option_parameters) for x in range(pathway_count)
+        OptionSimulator(random_seed=np.random.normal(),option_parameters=option_parameters) for x in range(pathway_count)
     ])
     return np.mean(monte_carlo_prices)
 

@@ -14,7 +14,7 @@ optiontype - either "call" or "put", used to calculate call options or put optio
 Returns:
 Value of a call option or put option depending on the value of optiontype
 '''
-def OptionSimulator(option_parameters):
+def OptionSimulator(random_seed, option_parameters):
 
     stock = option_parameters["stock"]
     strike = option_parameters["strike"]
@@ -26,7 +26,7 @@ def OptionSimulator(option_parameters):
     #Simulates the expiry value of a stock underlying asset
     #using a Weiner process (normal distribution)
     drift_term = (rate - 0.5 * sigma ** 2) * time
-    diffusion_term = sigma * np.sqrt(time) * np.random.normal()
+    diffusion_term = sigma * np.sqrt(time) * random_seed
     final_stock = stock * np.exp(drift_term + diffusion_term)
 
     #Calculates the payoff of a call/put option

@@ -1,6 +1,7 @@
 # TO DO
 
 ## High-Priority
+- [ ] Change Usage in README to be accurate with current code
 - [ ] Attempt to generate plot with R-value less than -0.95
 - [ ] Fix poor formatting of results table in README.md
 - [ ] Create src directory to contain python scripts
