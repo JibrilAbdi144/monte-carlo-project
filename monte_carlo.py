@@ -14,7 +14,7 @@ optiontype - either "call" or "put", used to calculate call options or put optio
 Returns:
 Value of a call option or put option depending on the value of optiontype
 '''
-def OptionSimulator(random_seed, option_parameters):
+def calculateMonteCarloPrice(random_seed, option_parameters):
 
     stock = option_parameters["stock"]
     strike = option_parameters["strike"]

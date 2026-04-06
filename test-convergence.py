@@ -1,25 +1,25 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-from simulator import OptionSimulator
-from black_scholes import BlackScholes
+from monte_carlo import calculateMonteCarloPrice
+from black_scholes import calculateBlackScholesPrice
 
 def generateMonteCarloPrices(pathway_count, option_parameters):
     monte_carlo_prices = np.array([
-        OptionSimulator(random_seed=np.random.normal(), option_parameters=option_parameters) for x in range(pathway_count)
+        calculateMonteCarloPrice(random_seed=np.random.normal(), option_parameters=option_parameters) for x in range(pathway_count)
     ])
     return monte_carlo_prices
 
 def calculateMeanMonteCarloPrice(pathway_count, option_parameters):
     monte_carlo_prices = np.array([
-        OptionSimulator(random_seed=np.random.normal(),option_parameters=option_parameters) for x in range(pathway_count)
+        calculateMonteCarloPrice(random_seed=np.random.normal(),option_parameters=option_parameters) for x in range(pathway_count)
     ])
     return np.mean(monte_carlo_prices)
 
 def calculatePriceAbsoluteError(pathway_count, option_parameters):
 
     monte_carlo_price = calculateMeanMonteCarloPrice(pathway_count=pathway_count, option_parameters=option_parameters)
-    black_scholes_price = BlackScholes(option_parameters=option_parameters)
+    black_scholes_price = calculateBlackScholesPrice(option_parameters=option_parameters)
 
     absolute_error = np.abs(monte_carlo_price - black_scholes_price)
 
@@ -29,7 +29,7 @@ def generateTablePriceData(pathway_counts, option_parameters):
     table_columns = ["Pathway Count", "Mean of Monte Carlo Prices", "Black Scholes Price", "Absolute Error", "Percentage Error"]
 
     table_data = []
-    black_scholes_price = float(BlackScholes(option_parameters=option_parameters))
+    black_scholes_price = float(calculateBlackScholesPrice(option_parameters=option_parameters))
     for pathway_count in pathway_counts:
         monte_carlo_prices = generateMonteCarloPrices(pathway_count=pathway_count, option_parameters=option_parameters)
         mean_monte_carlo_price = float(np.mean(monte_carlo_prices))
@@ -74,7 +74,7 @@ def plotPriceConvergence(pathway_counts, option_parameters):
             np.mean(generateMonteCarloPrices(pathway_count=pathway_count, option_parameters=option_parameters)) for i in range(3)
         ]) for pathway_count in pathway_counts
     ])
-    black_scholes_price = BlackScholes(option_parameters=option_parameters)
+    black_scholes_price = calculateBlackScholesPrice(option_parameters=option_parameters)
     relative_errors = np.abs(monte_carlo_prices - black_scholes_price) / black_scholes_price
 
     a, b, R = getBestFitLine(pathway_counts, relative_errors)
