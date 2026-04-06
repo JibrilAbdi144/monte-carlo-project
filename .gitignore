@@ -28,3 +28,5 @@ results/*.png
 # OS
 .DS_Store
 Thumbs.db
+
+project_context.md
