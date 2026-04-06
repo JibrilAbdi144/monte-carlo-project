@@ -3,9 +3,15 @@ import matplotlib.pyplot as plt
 import math
 from monte_carlo import calculateMonteCarloPrice
 from black_scholes import calculateBlackScholesPrice
+from tabulate import createRawTable
+from plot_convergence import plotConvergenceGraph
 
-def generateRandomSeeds(pathway_count):
-    return np.array([np.random.normal()] * pathway_count)
+def generateRandomSeed(pathway_count):
+    return np.random.normal(size=pathway_count)
+
+def generateAVSeed(pathway_count):
+    random_seed = np.random.normal(size = pathway_count // 2)
+    return np.concatenate((random_seed, [-random_variable for random_variable in random_seed]))
 
 def generateMonteCarloPrices(pathway_count, option_parameters):
     monte_carlo_prices = np.array([
@@ -92,7 +98,7 @@ def plotPriceConvergence(pathway_counts, option_parameters):
 
 if __name__ == "__main__":
 
-    pathway_counts = [100 * math.floor(2 ** n) for n in range(8)]
+    pathway_counts = [math.floor(100 * 2 ** n) for n in np.linspace(1., 16., 16)]
     option_parameters = {
         "stock": 100,
         "strike": 100,
@@ -102,5 +108,30 @@ if __name__ == "__main__":
         "option_type": "call"
     }
 
+    trial_number = 9
+    # monte_carlo_prices = [calculateMonteCarloPrice(generateRandomSeed(pathway_count=pathway_count), option_parameters=option_parameters) for pathway_count in pathway_counts]
+    # mean_monte_carlo_prices = [np.mean(monte_carlo_price) for monte_carlo_price in monte_carlo_prices]
+    # std_monte_carlo_prices = [np.std(monte_carlo_price) for monte_carlo_price in monte_carlo_prices]
+    mean_monte_carlo_prices = []
+    for pathway_count in pathway_counts:
+        trial_mean_monte_carlo_prices = []
+        for trial_index in range(trial_number):
+            trial_mean_monte_carlo_prices.append(
+                np.mean(calculateMonteCarloPrice(generateAVSeed(pathway_count=pathway_count), option_parameters=option_parameters))
+            )
+        mean_monte_carlo_prices.append(np.median(trial_mean_monte_carlo_prices))
+    black_scholes_price = calculateBlackScholesPrice(option_parameters=option_parameters)
+    absolute_errors = [abs(mean_monte_carlo_price - black_scholes_price) for mean_monte_carlo_price in mean_monte_carlo_prices]
+    relative_errors = [absolute_error / black_scholes_price for absolute_error in absolute_errors]
+
+    createRawTable({
+        "pathway count": pathway_counts,
+        "black-scholes price": [black_scholes_price] * len(pathway_counts),
+        "arithmetic mean": mean_monte_carlo_prices,
+        "absolute error": absolute_errors,
+        "percentage error": relative_errors
+    })
+    plotConvergenceGraph(pathway_counts=pathway_counts, dependent_variable=relative_errors)
+
     #tabulatePriceData(pathway_counts=pathway_counts, option_parameters=option_parameters)
-    plotPriceConvergence(pathway_counts=pathway_counts, option_parameters=option_parameters)
+    #plotPriceConvergence(pathway_counts=pathway_counts, option_parameters=option_parameters)

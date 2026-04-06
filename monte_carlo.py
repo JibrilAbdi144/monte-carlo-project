@@ -31,8 +31,8 @@ def calculateMonteCarloPrice(random_seed, option_parameters):
 
     #Calculates the payoff of a call/put option
     #using the expiry value of the stock
-    call_payoff = np.exp(-rate*time)*max(final_stock - strike, 0)
-    put_payoff = np.exp(-rate*time)*max(strike - final_stock, 0)
+    call_payoff = np.exp(-rate*time)*np.maximum(final_stock - strike, 0)
+    put_payoff = np.exp(-rate*time)*np.maximum(strike - final_stock, 0)
 
     #Returns the appropriate payoff value
     #depending on the value of optiontype
