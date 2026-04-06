@@ -4,6 +4,9 @@ import math
 from monte_carlo import calculateMonteCarloPrice
 from black_scholes import calculateBlackScholesPrice
 
+def generateRandomSeeds(pathway_count):
+    return np.array([np.random.normal()] * pathway_count)
+
 def generateMonteCarloPrices(pathway_count, option_parameters):
     monte_carlo_prices = np.array([
         calculateMonteCarloPrice(random_seed=np.random.normal(), option_parameters=option_parameters) for x in range(pathway_count)
@@ -88,6 +91,8 @@ def plotPriceConvergence(pathway_counts, option_parameters):
 
 
 if __name__ == "__main__":
+
+    pathway_counts = [100 * math.floor(2 ** n) for n in range(8)]
     option_parameters = {
         "stock": 100,
         "strike": 100,
@@ -96,8 +101,6 @@ if __name__ == "__main__":
         "sigma": 0.2,
         "option_type": "call"
     }
-
-    pathway_counts = [1000 * math.floor(2 ** n) for n in range(6)]
 
     #tabulatePriceData(pathway_counts=pathway_counts, option_parameters=option_parameters)
     plotPriceConvergence(pathway_counts=pathway_counts, option_parameters=option_parameters)
