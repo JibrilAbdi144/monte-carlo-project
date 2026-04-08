@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-from monte_carlo import calculateMonteCarloPrice
-from black_scholes import calculateBlackScholesPrice
-from tabulate import createRawTable
-from plot_convergence import plotConvergenceGraph
+from src.monte_carlo import calculateMonteCarloPrice
+from src.black_scholes import calculateBlackScholesPrice
+from src.tabulate import createRawTable
+from src.plot_convergence import plotConvergenceGraph
 
 def generateRandomSeed(pathway_count):
     return np.random.normal(size=pathway_count)

@@ -1,7 +1,7 @@
 import numpy as np
 import math
-from monte_carlo import calculateMonteCarloPrice
-from tabulate import createRawTable 
+from src.monte_carlo import calculateMonteCarloPrice
+from src.tabulate import createRawTable 
 
 def calculateDerivative(random_seed, option_parameters, parameter_type, derivative_type=1, step_size=1.):
     top_parameters = option_parameters.copy()
