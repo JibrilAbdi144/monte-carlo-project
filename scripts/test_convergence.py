@@ -1,10 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-from src.monte_carlo import calculateMonteCarloPrice
+
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from src.black_scholes import calculateBlackScholesPrice
-from src.tabulate import createRawTable
+from src.monte_carlo import calculateMonteCarloPrice
 from src.plot_convergence import plotConvergenceGraph
+from src.tabulate import createRawTable
+from src.data_models import validateParameters
 
 def generateRandomSeed(pathway_count):
     return np.random.normal(size=pathway_count)
@@ -98,7 +105,7 @@ def plotPriceConvergence(pathway_counts, option_parameters):
 
 if __name__ == "__main__":
 
-    pathway_counts = [math.floor(100 * 2 ** n) for n in np.linspace(1., 16., 16)]
+    pathway_counts = [math.floor(100 * 2 ** n) for n in np.linspace(1., 16., 4)]
     option_parameters = {
         "stock": 100,
         "strike": 100,
@@ -131,7 +138,7 @@ if __name__ == "__main__":
         "absolute error": absolute_errors,
         "percentage error": relative_errors
     })
-    plotConvergenceGraph(pathway_counts=pathway_counts, dependent_variable=relative_errors)
+    #plotConvergenceGraph(pathway_counts=pathway_counts, dependent_variable=relative_errors)
 
     #tabulatePriceData(pathway_counts=pathway_counts, option_parameters=option_parameters)
     #plotPriceConvergence(pathway_counts=pathway_counts, option_parameters=option_parameters)

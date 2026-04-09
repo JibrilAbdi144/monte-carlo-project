@@ -1,4 +1,10 @@
 import numpy as np
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from src.data_models import validateParameters
+
 
 '''
 Simulates a stock price using a Weiner process and then uses the formula for call/put option to calculate the payoff at the end
@@ -15,6 +21,8 @@ Returns:
 Value of a call option or put option depending on the value of optiontype
 '''
 def calculateMonteCarloPrice(random_seed, option_parameters):
+
+    validateParameters(option_parameters=option_parameters)
 
     stock = option_parameters["stock"]
     strike = option_parameters["strike"]
