@@ -20,7 +20,7 @@ optiontype - either "call" or "put", used to calculate call options or put optio
 Returns:
 Value of a call option or put option depending on the value of optiontype
 '''
-def calculateMonteCarloPrice(random_seed, option_parameters):
+def calculateMonteCarloPrice(random_seed, option_parameters, return_stock=False):
 
     validateParameters(option_parameters=option_parameters)
 
@@ -42,12 +42,15 @@ def calculateMonteCarloPrice(random_seed, option_parameters):
 
     #Returns the appropriate payoff value
     #depending on the value of optiontype
-    if option_type == "call":
-        call_payoff = np.exp(-rate*time)*np.maximum(final_stock - strike, 0)
-        return call_payoff
-    elif option_type == "put":
-        put_payoff = np.exp(-rate*time)*np.maximum(strike - final_stock, 0)
-        return put_payoff
+    if return_stock:
+        return final_stock
     else:
-        raise ValueError("Invalid value for 'option type' entered.\nPlease use either 'call' or 'put'.")
+        if option_type == "call":
+            call_payoff = np.exp(-rate*time)*np.maximum(final_stock - strike, 0)
+            return call_payoff
+        elif option_type == "put":
+            put_payoff = np.exp(-rate*time)*np.maximum(strike - final_stock, 0)
+            return put_payoff
+        else:
+            raise ValueError("Invalid value for 'option type' entered.\nPlease use either 'call' or 'put'.")
     
