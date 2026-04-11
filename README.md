@@ -1,6 +1,6 @@
 # 📈 Monte-Carlo Option Pricer & Risk Analyser
 
-> ✨ **Live Demo:** [Click here to try the new interactive dashboard!]("https://monte-carlo-options-pricing-76douzrylgmmpgxymv4oem.streamlit.app/") \
+> ✨ **Live Demo:** [Click here to try the new interactive dashboard!](https://monte-carlo-options-pricing-76douzrylgmmpgxymv4oem.streamlit.app/) \
 >   *Price European call & put options, Calculate Greeks & View Price Distributions with user-friendly inputs*
 
 
