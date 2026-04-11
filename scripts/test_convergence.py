@@ -105,7 +105,7 @@ def plotPriceConvergence(pathway_counts, option_parameters):
 
 if __name__ == "__main__":
 
-    pathway_counts = [math.floor(100 * 2 ** n) for n in np.linspace(1., 16., 4)]
+    pathway_counts = [math.floor(100 * 2 ** n) for n in np.linspace(1., 16., 16)]
     option_parameters = {
         "stock": 100,
         "strike": 100,
@@ -138,7 +138,7 @@ if __name__ == "__main__":
         "absolute error": absolute_errors,
         "percentage error": relative_errors
     })
-    #plotConvergenceGraph(pathway_counts=pathway_counts, dependent_variable=relative_errors)
+    plotConvergenceGraph(pathway_counts=pathway_counts, dependent_variable=relative_errors)
 
     #tabulatePriceData(pathway_counts=pathway_counts, option_parameters=option_parameters)
     #plotPriceConvergence(pathway_counts=pathway_counts, option_parameters=option_parameters)
