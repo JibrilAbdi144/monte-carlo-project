@@ -14,10 +14,12 @@ Monte-carlo simulator using Brownian motion to simulate stochastic asset price b
 - **:level_slider: Multiple Parameters:** Asset price, strike price, time to maturity, risk-free rate, asset volatility and option type (call or put) can all be changed while subject to robust input validation.
 - **:chart_with_downwards_trend: Convergence Analysis:** Plots relative error sizes against number of simulations to study convergence rates.
 - **:bar_chart: Interactive Dashboard:** Live web app with dynamic parameter inputs and histogram of asset prices at maturity.
+- **:jigsaw: Volatility Calibration:** 
 
 ## :books: Mathematical Theory
 - **Stochastic Calculus:**  Closed-form solution of Geometric Brownian Motion (GBM) to simulate asset price behaviour.
 - **Finite-Difference Numerical Methods:** Central First-Order & Second-Order Approximations with Common Random Numbers (CRMs) to calculate Greeks with reduced noise.
+- **Bisection Method:** Stable, robust non-linear equation solver to calculate volatility of an asset using real-world European option parameters.
 
 ## :exclamation: Key Results
 

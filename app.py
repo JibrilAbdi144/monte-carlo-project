@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # Importing from modules in this project
 # to perform the calculations
 from src.black_scholes import calculateBlackScholesPrice
-from src.monte_carlo import calculateMonteCarloPrice
+from src.monte_carlo import calculateMonteCarloPrice, generateRandomSeed
 from src.greeks import calculateDerivative
 from src.data_models import validateParameters
 
@@ -32,6 +32,7 @@ with st.form("my_form"):
     sigma = st.sidebar.number_input(label="Volatility (sigma)", min_value=0., value=0.2)
     option_type = st.sidebar.radio(label="Option Type", options=["call", "put"])
     simulation_count = st.sidebar.number_input(label="Number of Simulations", min_value=1, value=100000)
+    antithetic_variance = st.sidebar.checkbox(label="Use Antithetic Variates (Variance Reducton)", value=False)
 
     option_parameters = {
         "stock": stock,
@@ -51,7 +52,7 @@ with st.form("my_form"):
                 validateParameters(option_parameters=option_parameters)
 
 
-                random_seed = np.random.normal(size=simulation_count)
+                random_seed = generateRandomSeed(sample_size=simulation_count, antithetic_variates=antithetic_variance)
                 final_stock_prices = calculateMonteCarloPrice(random_seed=random_seed, option_parameters=option_parameters, return_stock=True)
                 mean_monte_carlo_price = np.mean(calculateMonteCarloPrice(random_seed=random_seed, option_parameters=option_parameters))
                 black_scholes_price = calculateBlackScholesPrice(option_parameters=option_parameters)
@@ -73,7 +74,8 @@ with st.form("my_form"):
                     "absolute_error": absolute_error,
                     "percentage_error": percentage_error,
                     "option_parameters": option_parameters,
-                    "greeks": greeks
+                    "greeks": greeks,
+                    "antithetic_variates": antithetic_variance
                 }
 
             except Exception as error:

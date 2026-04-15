@@ -1,23 +1,17 @@
 import numpy as np
 import scipy.stats as stats
 
+def calculateBlackScholesPrice(option_parameters: dict) -> float:
+    '''
+    Calculates the value of a European option using the Black-Scholes formula.
 
-'''
-This subroutine uses the Black-Scholes formula in order to value an call/put option
+    Arguments:
+        option_parameters (dict): The parameters of the option being calculated (stock, strike, time, rate, volatility and option type).
 
-Arguments:
-S - initial underlying stock price
-K - strike price
-T - time until expiry
-r - risk-free rate (interest)
-sigma - volatility of the asset
-optiontype - either "call" or "put", used to calculate call options or put options
+    Returns:
+        (float): The expected value of the European option.
 
-Returns:
-Value of a call option or put option depending on the value of optiontype
-'''
-def calculateBlackScholesPrice(option_parameters):
-
+    '''
     stock = option_parameters["stock"]
     strike = option_parameters["strike"]
     time = option_parameters["time"]
@@ -40,4 +34,4 @@ def calculateBlackScholesPrice(option_parameters):
         put_option = strike * np.exp(-rate * time) * stats.norm.cdf(-d2) - stock * stats.norm.cdf(-d1)
         return put_option
     else:
-        raise ValueError("Invalid value for 'option type' entered.\nPlease use either 'call' or 'put'.")
+        raise Exception("Error: None type returned from calculateBlackScholesPrice in src/black_scholes.py")

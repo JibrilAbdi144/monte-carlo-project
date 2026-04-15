@@ -1,28 +1,30 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plotConvergenceGraph(pathway_counts, dependent_variable):
+def plotConvergenceGraph(pathway_counts: list, relative_errors):
+    '''
+    Plots the relative error of the Monte-Carlo option prices against the number of simulation pathways generated.
 
-    a, b = np.polyfit(np.log(pathway_counts), np.log(dependent_variable), 1)
-    R = np.corrcoef(np.log(pathway_counts), np.log(dependent_variable))[0,1]
+    Arguments:
+        pathway_counts (list): The list of the number of simulation pathway numbers to be analysed.
+        relative_errors (np.ndarray): The relative errors that correspond to each simulation pathway number.
 
+    Returns:
+        None
+    '''
+
+    #Initialises the figure and axes objects
     figure, axes = plt.subplots()
 
-    axes.loglog(pathway_counts, dependent_variable, "o-", label="Monte-Carlo Relative Errors")
-    #axes.loglog(pathway_counts, [np.exp(b) * pathway_count ** a for pathway_count in pathway_counts], "-", label=r"Best-Fit Plot")
-    axes.loglog(pathway_counts, [(dependent_variable[0] / (pathway_counts[0] ** (-0.5))) * pathway_count ** (-0.5) for pathway_count in pathway_counts], "-", label=r"Central Limit Theorem Rate")
+    #Plots both a log-log plot of the relative errors against the number of simulation pathways and also plots the Central Limmit Theorem theoretical line
+    axes.loglog(pathway_counts, relative_errors, "o-", label="Monte-Carlo Relative Errors")
+    axes.loglog(pathway_counts, [(relative_errors[0] / (pathway_counts[0] ** (-0.5))) * pathway_count ** (-0.5) for pathway_count in pathway_counts], "-", label=r"Central Limit Theorem Rate")
 
+    #Sets the axes labels and the plot title
     axes.set_xlabel(r'Number of Simulations')
     axes.set_ylabel(r'Relative Error')
     axes.set_title("Monte-Carlo Convergence Analysis")
 
+    #Shows the legend and the plot
     axes.legend(loc="upper right", fontsize=12, frameon=True, shadow=False)
-
-    # new_line = '\n'
-    # annotation_text = rf'$y={a:.2f}x+{b:.2f}${new_line}$R={R:.2f}$'
-    # axes.text(0.05, 0.05, annotation_text, transform=axes.transAxes, fontsize=12,
-    #           horizontalalignment="left", verticalalignment="bottom",
-    #           bbox=dict(boxstyle="round", facecolor="white", alpha=0.8))
-
-    
     plt.show()
