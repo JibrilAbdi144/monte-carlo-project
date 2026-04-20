@@ -21,7 +21,7 @@ dist/
 .ipynb_checkpoints
 
 # Data and Results (keep locally, don't commit large files)
-results/*.png
+#results/*.png
 *.csv
 *.parquet
 
