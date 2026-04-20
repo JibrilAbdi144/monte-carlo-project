@@ -3,18 +3,15 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Importing from modules in this project
-# to perform the calculations
+# Importing from modules in this project to perform the calculations
 from src.black_scholes import calculateBlackScholesPrice
 from src.monte_carlo import calculateMonteCarloPrice, generateRandomSeed
 from src.greeks import calculateDerivative
 from src.data_models import validateParameters
 
+#st.session_state["results"] stores all the calculation results so that the results 
 if "results" not in st.session_state:
     st.session_state["results"] = None
-
-if st.session_state["results"]:
-    result = st.session_state["results"]
 
 
 # Title of the Streamlit dashboard
@@ -34,6 +31,7 @@ with st.form("my_form"):
     simulation_count = st.sidebar.number_input(label="Number of Simulations", min_value=1, value=100000)
     antithetic_variance = st.sidebar.checkbox(label="Use Antithetic Variates (Variance Reducton)", value=False)
 
+    #Stores the option parameter inputs in a dictionary
     option_parameters = {
         "stock": stock,
         "strike": strike,
@@ -43,15 +41,17 @@ with st.form("my_form"):
         "option_type": option_type.lower()
     }
 
+    #The big red "Calculate" button used for the calculations
     calculate_button = st.form_submit_button(label="Calculate", type="primary", use_container_width=True)
 
     if calculate_button:
         with st.spinner("Running Monte-Carlo Simulation: "):
 
             try:
+                #Validates the option parameters
                 validateParameters(option_parameters=option_parameters)
 
-
+                #Main calculations: Monte-Carlo, Black-Scholes, Greeks and more
                 random_seed = generateRandomSeed(sample_size=simulation_count, antithetic_variates=antithetic_variance)
                 final_stock_prices = calculateMonteCarloPrice(random_seed=random_seed, option_parameters=option_parameters, return_stock=True)
                 mean_monte_carlo_price = np.mean(calculateMonteCarloPrice(random_seed=random_seed, option_parameters=option_parameters))
@@ -66,7 +66,7 @@ with st.form("my_form"):
                 greeks["theta"] = calculateDerivative(random_seed=random_seed, option_parameters=option_parameters, parameter_type="time", step_size=0.01)
                 greeks["rho"] = calculateDerivative(random_seed=random_seed, option_parameters=option_parameters, parameter_type="rate", step_size=0.0001)
 
-
+                #Stores all of the calculation results here
                 st.session_state["results"] = {
                     "final_stock_prices": final_stock_prices,
                     "mean_monte_carlo_price": mean_monte_carlo_price,
@@ -77,18 +77,20 @@ with st.form("my_form"):
                     "greeks": greeks,
                     "antithetic_variates": antithetic_variance
                 }
-
+            #If an error occurs during calculation it is shown in a red box on the interface
             except Exception as error:
                 st.error(f"Error: {error}")  
-
+            
+            #Resets the dashboard after the calculation is complete
             st.rerun()
 
+#Displays the calculation results in the dashboard if st.session_state["results"] is present
 if st.session_state.get("results"):
 
     results = st.session_state["results"]
 
+    #Displays the main results: Monte-Carlo option price, Black-Scholes option price, absolute error and percentage error
     st.subheader("Main results")
-
     precision_level = 3
     rows = [st.columns(spec=2)] * 2
     rows[0][0].metric(value=f"{results["mean_monte_carlo_price"]:.{precision_level}f}", label=f"Monte-Carlo Option Price:")
@@ -98,19 +100,13 @@ if st.session_state.get("results"):
 
     st.divider()
 
+    #Displays the Greeks
     st.subheader("Greeks")
-
     greeks_metrics = st.columns(spec=5)
-
     for index, greek in enumerate(results["greeks"]):
         greeks_metrics[index].metric(label=greek.capitalize(), value=f"{results["greeks"][greek]:.{precision_level}f}")
 
-    # st.metric("Delta", f"{results["delta"]:.{precision_level}f}")
-    # st.metric("Gamma", f"{results["gamma"]:.{precision_level}f}")
-    # st.metric("Vega", f"{results["vega"]:.{precision_level}f}")
-    # st.metric("Theta", f"{results["theta"]:.{precision_level}f}")
-    # st.metric("Rho", f"{results["rho"]:.{precision_level}f}")
-
+    #Expander object with a matplotlib histogram plot showing the terminal prices of the stock
     with st.expander("View Stock Price Distribution"):
 
         figure, axes = plt.subplots()
@@ -125,36 +121,3 @@ if st.session_state.get("results"):
         st.pyplot(figure)
 
     st.success("Calculation successful!")
-
-
-
-# if st.session_state["results"] is None:
-
-
-#     if st.button("Calculate Option Price", type="primary", use_container_width=True):
-#         print()
-
-#     else:
-
-#         st.info("Adjust parameters and then press 'Calculate' to see results.")
-
-# else:
-
-#     results = st.session_state["results"]
-
-#     if st.button(label="Recalculate", type="primary", use_container_width=True):
-#         st.session_state["results"] = None
-#         st.rerun()
-
-    
-
-
-
-
-
-if st.session_state["results"]:
-    monte_carlo_prices = st.session_state["results"]["final_stock_prices"]
-    strike_price = st.session_state["results"]["option_parameters"]["strike"]
-
-    
-

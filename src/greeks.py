@@ -1,5 +1,4 @@
 import numpy as np
-import math
 from src.monte_carlo import calculateMonteCarloPrice
 
 def calculateDerivative(random_seed: np.ndarray, option_parameters: dict, parameter_type: str, derivative_type : int=1, step_size: float=1.) -> np.float64:
